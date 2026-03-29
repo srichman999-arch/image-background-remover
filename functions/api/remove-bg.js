@@ -1,9 +1,5 @@
-export interface Env {
-  REMOVE_BG_API_KEY: string;
-}
-
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request, env, ctx) {
     // 只处理 POST 请求
     if (request.method !== 'POST') {
       return new Response(
@@ -17,16 +13,16 @@ export default {
       const apiKey = env.REMOVE_BG_API_KEY;
 
       if (!apiKey) {
-        console.error('REMOVE_BG_API_KEY_KEY not set');
+        console.error('REMOVE_BG_API_KEY not set');
         return new Response(
           JSON.stringify({ error: '服务器配置错误：API密钥未设置' }),
           { status: 500, headers: { 'Content-Type': 'application/json' } }
         );
       }
 
-      // 解析 multipart/form-data
+      // 解析 multipart/form-data-data
       const formData = await request.formData();
-      const imageFile = formData.get('image') as File;
+      const imageFile = formData.get('image');
 
       if (!imageFile) {
         return new Response(
@@ -109,7 +105,12 @@ export default {
 
       // 将结果转换为 base64 返回
       const arrayBuffer = await resultBlob.arrayBuffer();
-      const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+      const uint8Array = new Uint8Array(arrayBuffer);
+      let binaryString = '';
+      for (let i = 0; i < uint8Array.length; i++) {
+        binaryString += String.fromCharCode(uint8Array[i]);
+      }
+      const base64 = btoa(binaryString);
       const dataUrl = `data:image/png;base64,${base64}`;
 
       return new Response(
