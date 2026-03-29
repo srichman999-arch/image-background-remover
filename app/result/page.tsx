@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function ResultPage() {
+// 组件内容提取到这里，用 Suspense 包裹
+function ResultContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [originalImage, setOriginalImage] = useState<string | null>(null);
@@ -309,5 +310,21 @@ export default function ResultPage() {
         </footer>
       </div>
     </div>
+  );
+}
+
+// 页面组件，用 Suspense 包裹 ResultContent
+export default function ResultPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto mb-6"></div>
+          <p className="text-xl font-semibold text-gray-700 dark:text-gray-200">加载中...</p>
+        </div>
+      </div>
+    }>
+      <ResultContent />
+    </Suspense>
   );
 }
