@@ -64,13 +64,23 @@ function ResultContent() {
 
       setProcessingStep(3); // 开始调用API
 
-      // 创建FormData
+      // 创建FormData for Remove.bg API
       const formData = new FormData();
-      formData.append('image', blob, 'image.jpg');
+      formData.append('image_file', blob, 'image.jpg');
+      formData.append('size', 'auto');
 
-      // 调用API，添加超时控制
-      const apiResponse = await fetch('/api/remove-bg', {
+      // 获取API Key
+      const apiKey = process.env.NEXT_PUBLIC_REMOVE_BG_API_KEY;
+      if (!apiKey) {
+        throw new Error('API Key 未配置，请检查环境变量');
+      }
+
+      // 直接调用 Remove.bg API
+      const apiResponse = await fetch('https://api.remove.bg/v1.0/removebg', {
         method: 'POST',
+        headers: {
+          'X-Api-Key': apiKey,
+        },
         body: formData,
         signal: controller.signal,
       });
@@ -79,20 +89,24 @@ function ResultContent() {
 
       setProcessingStep(4); // API返回，处理结果
 
-      const data = await apiResponse.json();
-
       if (!apiResponse.ok) {
-        throw new Error(data.error || '处理失败');
+        const errorData = await apiResponse.json().catch(() => ({ errors: ['未知错误'] }));
+        throw new Error(errorData.errors?.[0] || `API 错误: ${apiResponse.status}`);
       }
 
-      if (data.success && data.resultImage) {
-        setProcessedImage(data.resultImage);
-        // 处理成功后清理sessionStorage
-        sessionStorage.removeItem('originalImage');
-        sessionStorage.removeItem('imageReady');
-      } else {
-        throw new Error('处理失败，未返回结果图片');
-      }
+      // Remove.bg 返回的是二进制图片数据，需要转换为 base64
+      const imageBlob = await apiResponse.blob();
+      const reader = new FileReader();
+      const resultImage = await new Promise<string>((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(imageBlob);
+      });
+
+      setProcessedImage(resultImage);
+      // 处理成功后清理sessionStorage
+      sessionStorage.removeItem('originalImage');
+      sessionStorage.removeItem('imageReady');
     } catch (err) {
       clearTimeout(timeoutId);
 
