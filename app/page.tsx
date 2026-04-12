@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import LoginButton from './components/LoginButton';
 
 export default function Home() {
   const [isDragging, setIsDragging] = useState(false);
@@ -156,6 +157,9 @@ export default function Home() {
       <div className="container mx-auto px-4 py-8">
         {/* 头部 */}
         <header className="text-center mb-12">
+          <div className="flex justify-end mb-4">
+            <LoginButton />
+          </div>
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
             图片背景移除工具
           </h1>
