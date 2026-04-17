@@ -9,5 +9,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+  // @ts-expect-error trustHost is not in AuthOptions type but required for deployment
   trustHost: true,
 })

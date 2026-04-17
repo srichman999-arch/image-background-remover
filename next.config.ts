@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+// 扩展 NextConfig 类型以支持 eslint 属性
+type NextConfigWithEslint = NextConfig & {
+  eslint?: {
+    ignoreDuringBuilds?: boolean;
+  };
+};
+
+const nextConfig: NextConfigWithEslint = {
   images: {
     unoptimized: true,
   },
