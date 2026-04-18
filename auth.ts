@@ -1,20 +1,13 @@
+// auth.ts (项目根目录)
 import NextAuth from "next-auth"
-import Google from "next-auth/providers/google"
+import GitHubProvider from "next-auth/providers/github"
 
-const authConfig = {
+export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
-  trustHost: true,
-}
-
-const authResult = NextAuth(authConfig)
-
-export const handlers = authResult.handlers
-export const signIn = authResult.signIn
-export const signOut = authResult.signOut
-export const auth = authResult.auth
+  secret: process.env.NEXTAUTH_SECRET!,
+})
