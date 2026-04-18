@@ -1,5 +1,4 @@
 import { handlers } from "@/auth"
 
-const { GET, POST } = handlers
-
-export { GET, POST }
+export const GET = handlers.GET
+export const POST = handlers.POST

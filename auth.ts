@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+const authConfig = {
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID || '',
@@ -9,6 +9,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  // @ts-expect-error trustHost is not in AuthOptions type but required for deployment
   trustHost: true,
-})
+}
+
+const authResult = NextAuth(authConfig)
+
+export const handlers = authResult.handlers
+export const signIn = authResult.signIn
+export const signOut = authResult.signOut
+export const auth = authResult.auth
