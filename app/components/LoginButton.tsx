@@ -3,7 +3,20 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function LoginButton() {
-  const { data: session } = useSession();
+  const sessionData = useSession();
+  
+  // 安全访问，避免解构 undefined
+  const session = sessionData?.data;
+  const status = sessionData?.status;
+
+  // 加载中状态
+  if (status === "loading") {
+    return (
+      <div className="px-4 py-2 text-gray-500">
+        加载中...
+      </div>
+    );
+  }
 
   if (session) {
     return (
