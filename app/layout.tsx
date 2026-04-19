@@ -1,21 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import { Providers } from "./providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({ 
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
-  title: "AI 图片背景移除工具",
-  description: "使用 AI 技术快速移除图片背景，支持 PNG 透明背景下载",
+  title: "Image Background Remover",
+  description: "Remove background from images",
 };
 
 export default function RootLayout({
@@ -24,12 +18,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Providers>{children}</Providers>
+    <html lang="en">
+      <body className={`${inter.variable} font-sans antialiased`}>
+        {children}
       </body>
+body>
     </html>
-  );
+  }
 }
