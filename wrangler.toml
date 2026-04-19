@@ -2,8 +2,9 @@ name = "image-background-remover"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
 
-# 关键：指定输出目录
-pages_build_output_dir = ".next"
+# 关键：使用 next-on-pages 构建后的输出目录
+# @cloudflare/next-on-pages 会输出到 .vercel/output/static
+pages_build_output_dir = ".vercel/output/static"
 
 # D1 数据库绑定
 [[d1_databases]]
