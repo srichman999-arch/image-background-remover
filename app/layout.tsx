@@ -22,7 +22,6 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans antialiased`}>
         {children}
       </body>
-body>
     </html>
-  }
+  );
 }
