@@ -10,7 +10,7 @@ pages_build_output_dir = ".vercel/output/static"
 [[d1_databases]]
 binding = "DB"
 database_name = "image-background-remover-db"
-database_id = "133876b7-3f25-4cf7-9c09-40e55bc5e1b3"  # 替换为真实的 UUID
+database_id = "133876b7-3f25-4cf7-9c09-40e55bc5e1b3"
 
 # 环境变量
 [vars]
